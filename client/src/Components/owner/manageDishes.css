@@ -1,0 +1,71 @@
+/* ================= Modal Form Styling ================= */
+
+.modal-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form Group Spacing */
+.modal-box input,
+.modal-box textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: #e0e5ec;
+    color: #333;
+
+    /* Inner neumorphic effect */
+    box-shadow: 
+        inset 4px 4px 8px #c5c9d3,
+        inset -4px -4px 8px #ffffff;
+
+    transition: 0.2s ease;
+}
+
+/* Focus Effect */
+.modal-box input:focus,
+.modal-box textarea:focus {
+    box-shadow: 
+        inset 2px 2px 5px #c5c9d3,
+        inset -2px -2px 5px #ffffff,
+        0 0 0 2px #ff4d4d;
+}
+
+/* Textarea specific */
+.modal-box textarea {
+    resize: none;
+    min-height: 80px;
+}
+
+/* Update Button Styling */
+.modal-box .btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    background: #e0e5ec;
+    color: #ff4d4d;
+
+    box-shadow: 
+        6px 6px 12px #c5c9d3,
+        -6px -6px 12px #ffffff;
+
+    transition: 0.3s ease;
+}
+
+.modal-box .btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Close Button Improve */
+.close-modal {
+    font-size: 18px;
+    color: #ff4d4d;
+}

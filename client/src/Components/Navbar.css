@@ -1,0 +1,108 @@
+:root {
+    --primary-color: #e0e5ec;
+    --shadow-dark: #a3b1c6;
+    --shadow-light: #ffffff;
+    --accent-color: #ff6b6b;
+    --text-color: #2d3436;
+    --veg-btn-colr: #27ae60;
+    --nonveg-btn-colr: #c0392b;
+    --all-btn-colr: #2980b9;
+}
+
+
+/* ============================= */
+/* Global Neumorphism Elements   */
+/* ============================= */
+
+.neu-inset {
+    background: var(--primary-color);
+    border-radius: 15px;
+    box-shadow: inset 3px 3px 5px var(--shadow-dark),
+        inset -3px -3px 5px var(--shadow-light);
+    padding: 10px 15px;
+}
+
+/* ============================= */
+/* Buttons                       */
+/* ============================= */
+
+.neu-button {
+    background: var(--primary-color);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px var(--shadow-dark),
+        -5px -5px 10px var(--shadow-light);
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-color);
+    transition: color 0.2s ease, box-shadow 0.2s ease;
+    outline: 2px solid transparent;
+}
+
+.neu-button:active,
+.neu-button.active {
+    box-shadow: inset 2px 2px 5px var(--shadow-dark),
+        inset -2px -2px 5px var(--shadow-light);
+    color: var(--accent-color);
+    outline: 2px solid var(--accent-color);
+}
+
+/* Logo section (left side) */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    & img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        border-radius: 100%;
+    }
+}
+
+/* Menu section (right side) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+
+/* ============================= */
+/* Mobile Responsive Navbar */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    .neu-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .header-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .neu-button {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    .logo-container h1 {
+        font-size: 1.1rem;
+    }
+
+    .logo-container img {
+        width: 35px;
+        height: 35px;
+    }
+}
