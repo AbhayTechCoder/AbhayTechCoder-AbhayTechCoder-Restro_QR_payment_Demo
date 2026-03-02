@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import { useCart } from "../contexts/CartContext";
 
 export const Home = () => {
-
   const [allItems, setAllItems] = useState([]);
-  const { addToCart } = useCart(); // Context se aa raha hai
+  const { addToCart } = useCart();
+
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   const fetchVegItems = async () => {
     try {
-      const response = await fetch(${import.meta.env.VITE_API_URL}/api/dishes/veg);
+      const response = await fetch(`${BASE_URL}/api/dishes/veg`);
       const data = await response.json();
       setAllItems(prev => [...prev, ...data]);
     } catch (error) {
@@ -18,7 +19,7 @@ export const Home = () => {
 
   const fetchNonVegItems = async () => {
     try {
-      const response = await fetch(${import.meta.env.VITE_API_URL}/api/dishes/non-veg);
+      const response = await fetch(`${BASE_URL}/api/dishes/non-veg`);
       const data = await response.json();
       setAllItems(prev => [...prev, ...data]);
     } catch (error) {
@@ -54,7 +55,7 @@ export const Home = () => {
 
                 <button
                   className="btn all-btn"
-                  onClick={() => addToCart(item)}  // ✅ Context function
+                  onClick={() => addToCart(item)}
                 >
                   Add +
                 </button>

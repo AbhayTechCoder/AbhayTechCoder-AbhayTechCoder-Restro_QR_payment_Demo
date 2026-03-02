@@ -12,7 +12,10 @@ export const PostDishes = () => {
     category: "veg",
     description: "",
   });
+
   const [loading, setLoading] = useState(false);
+
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,17 +43,15 @@ export const PostDishes = () => {
       setLoading(true);
 
       const response = await axios.post(
-        ${import.meta.env.VITE_API_URL}/api/dishes/post-dish,
+        `${BASE_URL}/api/dishes/post-dish`,
         dish,
         { withCredentials: true }
       );
 
-      // ✅ Axios success check
       if (response.status === 201) {
         alert("Post successful");
         navigate(-1);
       }
-
     } catch (error) {
       console.log("Post dish error:", error);
       alert("Failed to post dish");
@@ -102,7 +103,6 @@ export const PostDishes = () => {
               placeholder="Paste image URL"
             />
 
-            {/* Image Preview */}
             {dish.image_url && (
               <img
                 src={dish.image_url}
@@ -139,6 +139,7 @@ export const PostDishes = () => {
           <button type="submit" className="neu-button" disabled={loading}>
             {loading ? "Posting..." : "Post Dish"}
           </button>
+
         </form>
       </div>
     </div>
