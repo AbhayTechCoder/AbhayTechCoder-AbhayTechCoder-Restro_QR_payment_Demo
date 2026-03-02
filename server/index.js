@@ -11,26 +11,12 @@ const { orderRouter } = require("./routers/order-routes");
 
 const app = express();
 
-/* ================= CORS CONFIG ================= */
-
-const allowedOrigins = [
-  "https://abhay-tech-coder-abhay-tech-coder-r-virid.vercel.app",
-  "https://abhay-tech-coder-abhay-tech-git-898b52-abhaytechcoders-projects.vercel.app",
-  "https://abhay-tech-coder-abhay-tech-coder-restro-qr-payment-p221k2lar.vercel.app"
-];
+/* ================= TEMPORARY DEBUG CORS ================= */
+/* ⚠️ This allows ALL origins (for debugging only) */
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (like Postman)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: true,
     credentials: true,
   })
 );
