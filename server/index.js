@@ -11,25 +11,30 @@ const { orderRouter } = require("./routers/order-routes");
 
 const app = express();
 
-/* ================= TEMPORARY DEBUG CORS ================= */
-/* ⚠️ This allows ALL origins (for debugging only) */
+/* ================= CORS CONFIG ================= */
+
+/*
+  CLIENT_URL must be set in Render Environment Variables
+  Example:
+  CLIENT_URL=https://abhay-tech-coder-abhay-tech-coder-r-virid.vercel.app
+*/
 
 app.use(
   cors({
-    origin: true,
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
 
 /* ================= MIDDLEWARE ================= */
 
-app.use(cookieParser());
 app.use(express.json());
+app.use(cookieParser());
 
 /* ================= ROUTES ================= */
 
 app.get("/", (req, res) => {
-  res.send("Server running with MongoDB Abhay");
+  res.send("Server running with MongoDB Abhay 🚀");
 });
 
 app.use("/api/auth", authRouter);
@@ -41,8 +46,12 @@ app.use("/api/dishes", dishRouter);
 
 const PORT = process.env.PORT || 8000;
 
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Database connection failed:", err);
   });
-});
