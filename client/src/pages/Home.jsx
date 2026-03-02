@@ -8,7 +8,7 @@ export const Home = () => {
 
   const fetchVegItems = async () => {
     try {
-      const response = await fetch("${import.meta.env.VITE_API_URL}/api/dishes/veg");
+      const response = await fetch(${import.meta.env.VITE_API_URL}/api/dishes/veg);
       const data = await response.json();
       setAllItems(prev => [...prev, ...data]);
     } catch (error) {
@@ -18,7 +18,7 @@ export const Home = () => {
 
   const fetchNonVegItems = async () => {
     try {
-      const response = await fetch("${import.meta.env.VITE_API_URL}/api/dishes/non-veg");
+      const response = await fetch(${import.meta.env.VITE_API_URL}/api/dishes/non-veg);
       const data = await response.json();
       setAllItems(prev => [...prev, ...data]);
     } catch (error) {

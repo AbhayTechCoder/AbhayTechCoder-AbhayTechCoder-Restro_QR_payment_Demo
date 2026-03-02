@@ -40,7 +40,7 @@ export const PostDishes = () => {
       setLoading(true);
 
       const response = await axios.post(
-        "${import.meta.env.VITE_API_URL}/api/dishes/post-dish",
+        ${import.meta.env.VITE_API_URL}/api/dishes/post-dish,
         dish,
         { withCredentials: true }
       );

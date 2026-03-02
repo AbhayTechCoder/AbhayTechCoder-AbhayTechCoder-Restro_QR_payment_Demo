@@ -9,7 +9,7 @@ export const NonVeg = () => {
   const fetchNonVegItems = async () => {
     try {
       const response = await fetch(
-        "${import.meta.env.VITE_API_URL}/api/dishes/non-veg"
+        `${import.meta.env.VITE_API_URL}/api/dishes/non-veg`
       );
       const data = await response.json();
       setNonVegItems(data);

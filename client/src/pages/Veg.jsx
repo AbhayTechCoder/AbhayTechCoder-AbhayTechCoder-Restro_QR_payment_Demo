@@ -9,7 +9,7 @@ export const Veg = () => {
   const fetchVegItems = async () => {
     try {
       const response = await fetch(
-        "${import.meta.env.VITE_API_URL}/api/dishes/veg"
+        `${import.meta.env.VITE_API_URL}/api/dishes/veg`
       );
       const data = await response.json();
       setVegItems(data);

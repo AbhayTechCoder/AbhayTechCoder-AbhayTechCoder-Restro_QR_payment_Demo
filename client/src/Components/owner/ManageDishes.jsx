@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import "./ManageDishes.css";
 
 export const ManageDishes = () => {
@@ -8,15 +7,12 @@ export const ManageDishes = () => {
   const [category, setCategory] = useState("veg");
   const [editDish, setEditDish] = useState(null);
 
-  const navigate = useNavigate();
-
-
-  console.log("Current dishes:", dishes);
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   const fetchDishes = async () => {
     try {
       const res = await axios.get(
-        "${import.meta.env.VITE_API_URL}/api/dishes/all"
+        `${BASE_URL}/api/dishes/all`
       );
       setDishes(res.data);
     } catch (err) {
@@ -31,7 +27,7 @@ export const ManageDishes = () => {
   const handleDelete = async (id, category) => {
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/dishes/dish-delete/${id}`,
+        `${BASE_URL}/api/dishes/dish-delete/${id}`,
         {
           data: { category },
           withCredentials: true
@@ -39,7 +35,6 @@ export const ManageDishes = () => {
       );
 
       fetchDishes();
-
     } catch (err) {
       console.log("Delete error:", err);
     }
@@ -50,14 +45,13 @@ export const ManageDishes = () => {
       const { _id, name, price, description, category } = editDish;
 
       await axios.put(
-        ${ import.meta.env.VITE_API_URL } / api / dishes / dish - update / ${ _id }`,
-        { name, price, description, category }, // send category
+        `${BASE_URL}/api/dishes/dish-update/${_id}`,
+        { name, price, description, category },
         { withCredentials: true }
       );
 
       setEditDish(null);
       fetchDishes();
-
     } catch (err) {
       console.log("Update error:", err);
     }
@@ -69,32 +63,28 @@ export const ManageDishes = () => {
 
   return (
     <div className="container">
-
-      {/* 🔥 Category Toggle */}
       <div className="owner-nav">
         <button
-          className={`owner - link ${ category === "veg" ? "active" : ""}`}
+          className={`owner-link ${category === "veg" ? "active" : ""}`}
           onClick={() => setCategory("veg")}
         >
           Veg
         </button>
 
         <button
-          className={`owner - link ${ category === "non-veg" ? "active" : "" } `}
+          className={`owner-link ${category === "non-veg" ? "active" : ""}`}
           onClick={() => setCategory("non-veg")}
         >
           Non-Veg
         </button>
       </div>
 
-      {/* 🔥 Dish Grid */}
       <div className="veg-grid card-padding">
         {filteredDishes.length === 0 ? (
           <p>No dishes found</p>
         ) : (
           filteredDishes.map((item) => (
             <div className="card" key={item._id}>
-
               <div className="veg-image-container">
                 <img
                   src={item.image_url}
@@ -119,7 +109,9 @@ export const ManageDishes = () => {
 
                   <button
                     className="btn nonveg-btn"
-                    onClick={() => handleDelete(item._id, item.category)}
+                    onClick={() =>
+                      handleDelete(item._id, item.category)
+                    }
                   >
                     Delete
                   </button>
@@ -130,7 +122,6 @@ export const ManageDishes = () => {
         )}
       </div>
 
-      {/* 🔥 Edit Popup Modal */}
       {editDish && (
         <div className="modal-overlay">
           <div className="modal-box">

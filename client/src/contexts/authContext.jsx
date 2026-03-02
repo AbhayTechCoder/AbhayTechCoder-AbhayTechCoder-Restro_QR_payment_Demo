@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 
     const fetchMe = async () => {
         try {
-            const res = await fetch("${import.meta.env.VITE_API_URL}/api/users/me", {
+            const res = await fetch(${import.meta.env.VITE_API_URL}/api/users/me, {
                 credentials: "include",
             });
 
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     };
     const fetchAllUser = async () => {
         try {
-            const res = await fetch("${import.meta.env.VITE_API_URL}/api/users/getusers", {
+            const res = await fetch(${import.meta.env.VITE_API_URL}/api/users/getusers, {
                 credentials: "include",
             });
 
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 
     const fetchAdmin = async () => {
         try {
-            const res = await fetch("${import.meta.env.VITE_API_URL}/api/users/getAdmin", {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/users/getAdmin`, {
                 credentials: "include",
             });
 
