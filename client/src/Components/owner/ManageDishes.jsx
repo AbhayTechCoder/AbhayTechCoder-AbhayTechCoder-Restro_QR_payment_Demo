@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./ManageDishes.css";
 
+
 export const ManageDishes = () => {
   const [dishes, setDishes] = useState([]);
   const [category, setCategory] = useState("veg");
