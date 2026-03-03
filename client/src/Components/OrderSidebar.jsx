@@ -1,66 +1,63 @@
-import axios from "axios";
+import { useCart } from "../contexts/CartContext";
 
-const OrderSidebar = ({
-  cartItems,
-  setCartItems,
-  tableNumber,
-  setTableNumber,
-}) => {
+export const OrderSidebar = () => {
 
-  const total = cartItems
-    ? cartItems.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-      )
-    : 0;
-
-  const handlePayment = async () => {
-    try {
-      if (!total) {
-        alert("Cart is empty");
-        return;
-      }
-
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
-        { amount: total },
-        { withCredentials: true }
-      );
-
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY,
-        amount: data.order.amount,
-        currency: "INR",
-        name: "Delicious Bites",
-        order_id: data.order.id,
-        handler: async function (response) {
-          await axios.post(
-            `${import.meta.env.VITE_API_URL}/api/payment/verify-payment`,
-            response,
-            { withCredentials: true }
-          );
-
-          alert("Payment Successful");
-          if (setCartItems) setCartItems([]);
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const {
+    cartItems,
+    tableNumber,
+    setTableNumber,
+    increaseQty,
+    decreaseQty,
+    totalAmount
+  } = useCart();
 
   return (
-    <div className="order-sidebar">
-      <h3>Total: ₹{total}</h3>
-      <button onClick={handlePayment}>
+    <div className="order-panel">
+
+      <h3>Table No</h3>
+      <input
+        type="number"
+        className="table-input"
+        value={tableNumber}
+        onChange={(e) => setTableNumber(e.target.value)}
+        placeholder="Enter table No"
+      />
+
+      <h3>Your Order</h3>
+
+      {cartItems.length === 0 && (
+        <p style={{ textAlign: "center", opacity: 0.6 }}>
+          Cart is empty
+        </p>
+      )}
+
+      {cartItems.map(item => (
+        <div key={item._id} className="order-item">
+
+          <div className="left-section">
+            <span className="qty">{item.quantity}x</span>
+            <span className="dish-name">{item.name}</span>
+          </div>
+
+          <span className="price">
+            ₹{item.price * item.quantity}
+          </span>
+
+          <div className="qty-control">
+            <button onClick={() => decreaseQty(item._id)}>-</button>
+            <span>{item.quantity}</span>
+            <button onClick={() => increaseQty(item._id)}>+</button>
+          </div>
+
+        </div>
+      ))}
+
+      <h3>Total: ₹{totalAmount}</h3>
+
+      <button disabled={cartItems.length === 0}>
         Proceed to Payment
       </button>
+
     </div>
   );
 };
-
-export default OrderSidebar;
