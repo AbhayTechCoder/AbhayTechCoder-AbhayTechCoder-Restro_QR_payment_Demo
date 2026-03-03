@@ -1,21 +1,23 @@
 import axios from "axios";
 
 const OrderSidebar = ({
-  cartItems = [],        // ✅ default safe value
-  setCartItems = () => {},
+  cartItems,
+  setCartItems,
   tableNumber,
   setTableNumber,
 }) => {
 
-  // ✅ Safe total calculation
-  const total = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+  // SAFE total (agar props na aaye to crash na kare)
+  const total = cartItems
+    ? cartItems.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      )
+    : 0;
 
   const handlePayment = async () => {
     try {
-      if (total === 0) {
+      if (!total || total === 0) {
         alert("Cart is empty");
         return;
       }
@@ -31,7 +33,6 @@ const OrderSidebar = ({
         amount: data.order.amount,
         currency: "INR",
         name: "Delicious Bites",
-        description: "Order Payment",
         order_id: data.order.id,
         handler: async function (response) {
           await axios.post(
@@ -41,7 +42,10 @@ const OrderSidebar = ({
           );
 
           alert("Payment Successful ✅");
-          setCartItems([]);
+
+          if (setCartItems) {
+            setCartItems([]);
+          }
         },
         theme: {
           color: "#ff6b6b",
@@ -52,16 +56,14 @@ const OrderSidebar = ({
       razor.open();
 
     } catch (error) {
-      console.error("Payment Error:", error);
-      alert("Payment failed ❌");
+      console.error(error);
     }
   };
 
   return (
-    <div className="order-sidebar">
+    <div>
       <h3>Total: ₹{total}</h3>
-
-      <button onClick={handlePayment} className="neu-button">
+      <button onClick={handlePayment}>
         Proceed to Payment
       </button>
     </div>

@@ -13,7 +13,7 @@ import { PostDishes } from "./Components/owner/PostDish";
 import { PendingOrders } from "./Components/owner/PendingOrders";
 import { CompletedOrders } from "./Components/owner/CompletedOrders";
 import { PaymentSettings } from "./Components/owner/PaymentSettings";
-import OrderSidebar from "./Components/OrderSidebar"; // ✅ FIXED (no curly braces)
+import OrderSidebar from "./Components/OrderSidebar";
 import "./index.css";
 
 function App() {
