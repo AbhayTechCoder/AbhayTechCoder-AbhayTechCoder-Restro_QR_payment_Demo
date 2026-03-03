@@ -7,7 +7,6 @@ const OrderSidebar = ({
   setTableNumber,
 }) => {
 
-  // SAFE total (agar props na aaye to crash na kare)
   const total = cartItems
     ? cartItems.reduce(
         (acc, item) => acc + item.price * item.quantity,
@@ -17,7 +16,7 @@ const OrderSidebar = ({
 
   const handlePayment = async () => {
     try {
-      if (!total || total === 0) {
+      if (!total) {
         alert("Cart is empty");
         return;
       }
@@ -41,19 +40,13 @@ const OrderSidebar = ({
             { withCredentials: true }
           );
 
-          alert("Payment Successful ✅");
-
-          if (setCartItems) {
-            setCartItems([]);
-          }
-        },
-        theme: {
-          color: "#ff6b6b",
+          alert("Payment Successful");
+          if (setCartItems) setCartItems([]);
         },
       };
 
-      const razor = new window.Razorpay(options);
-      razor.open();
+      const rzp = new window.Razorpay(options);
+      rzp.open();
 
     } catch (error) {
       console.error(error);
@@ -61,7 +54,7 @@ const OrderSidebar = ({
   };
 
   return (
-    <div>
+    <div className="order-sidebar">
       <h3>Total: ₹{total}</h3>
       <button onClick={handlePayment}>
         Proceed to Payment
