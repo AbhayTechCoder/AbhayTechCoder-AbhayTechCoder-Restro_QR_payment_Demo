@@ -38,11 +38,12 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("Server running with MongoDB Abhay 🚀");
 });
-app.use("/api/payment", paymentRoutes);
+
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/dishes", dishRouter);
+app.use("/api/payment", paymentRoutes);
 
 /* ================= SERVER START ================= */
 
