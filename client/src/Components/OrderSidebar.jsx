@@ -54,7 +54,7 @@ export const OrderSidebar = () => {
 
       <h3>Total: ₹{totalAmount}</h3>
 
-      <button disabled={cartItems.length === 0}>
+      <button onClick={handlePayment}>
         Proceed to Payment
       </button>
 

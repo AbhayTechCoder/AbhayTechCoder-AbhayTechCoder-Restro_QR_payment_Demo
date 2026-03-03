@@ -8,6 +8,8 @@ const { authRouter } = require("./routers/auth-router");
 const { userRouter } = require("./routers/user-router");
 const { dishRouter } = require("./routers/dish-router");
 const { orderRouter } = require("./routers/order-routes");
+const paymentRoutes = require("./routes/paymentRoutes");
+
 
 const app = express();
 
@@ -36,7 +38,7 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("Server running with MongoDB Abhay 🚀");
 });
-
+app.use("/api/payment", paymentRoutes);
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter);
