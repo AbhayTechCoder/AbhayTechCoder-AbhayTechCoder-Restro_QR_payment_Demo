@@ -8,12 +8,14 @@ const { authRouter } = require("./routers/auth-router");
 const { userRouter } = require("./routers/user-router");
 const { dishRouter } = require("./routers/dish-router");
 const { orderRouter } = require("./routers/order-routes");
-const paymentRoutes = require("./routes/paymentRoutes");
+// const paymentRoutes = require("./routes/paymentRoutes");
+const paymentRoutes = require("./routers/paymentRoutes");
 
 
 const app = express();
 
 /* ================= CORS CONFIG ================= */
+
 
 /*
   CLIENT_URL must be set in Render Environment Variables
