@@ -8,20 +8,12 @@ const { authRouter } = require("./routers/auth-router");
 const { userRouter } = require("./routers/user-router");
 const { dishRouter } = require("./routers/dish-router");
 const { orderRouter } = require("./routers/order-routes");
-// const paymentRoutes = require("./routes/paymentRoutes");
 const paymentRoutes = require("./routers/paymentRoutes");
 
+const http = require("http");
+const { Server } = require("socket.io");
 
 const app = express();
-
-/* ================= CORS CONFIG ================= */
-
-
-/*
-  CLIENT_URL must be set in Render Environment Variables
-  Example:
-  CLIENT_URL=https://abhay-tech-coder-abhay-tech-coder-r-virid.vercel.app
-*/
 
 /* ================= CORS CONFIG ================= */
 
@@ -60,13 +52,30 @@ app.use("/api/orders", orderRouter);
 app.use("/api/dishes", dishRouter);
 app.use("/api/payment", paymentRoutes);
 
+/* ================= SOCKET SERVER ================= */
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true
+  }
+});
+
+app.set("io", io);
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+});
+
 /* ================= SERVER START ================= */
 
 const PORT = process.env.PORT || 8000;
 
 connectDB()
   .then(() => {
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
   })
