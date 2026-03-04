@@ -12,7 +12,9 @@ export const OrderSidebar = () => {
   } = useCart();
 
   const handlePayment = async () => {
+
     try {
+
       console.log("Payment button clicked");
 
       if (!totalAmount || totalAmount <= 0) {
@@ -20,6 +22,7 @@ export const OrderSidebar = () => {
         return;
       }
 
+      // 1️⃣ Create Razorpay Order
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
         {
@@ -28,7 +31,7 @@ export const OrderSidebar = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            amount: totalAmount,
+            amount: totalAmount
           }),
         }
       );
@@ -40,6 +43,7 @@ export const OrderSidebar = () => {
         return;
       }
 
+      // 2️⃣ Razorpay Options
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: data.order.amount,
@@ -50,6 +54,8 @@ export const OrderSidebar = () => {
 
         handler: async function (response) {
 
+          console.log("Razorpay Response:", response);
+
           const verifyRes = await fetch(
             `${import.meta.env.VITE_API_URL}/api/payment/verify-payment`,
             {
@@ -57,34 +63,50 @@ export const OrderSidebar = () => {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(response),
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              }),
             }
           );
 
           const verifyData = await verifyRes.json();
 
           if (verifyData.success) {
+
             alert("Payment Successful 🎉");
 
-            // 🔥 Future: yaha cart clear kar sakte ho
-            // clearCart();
+            // future
+            // clearCart()
 
           } else {
+
             alert("Payment Verification Failed ❌");
+
           }
         },
 
-        theme: {
-          color: "#ff6b6b",
+        prefill: {
+          name: "Customer",
+          email: "customer@email.com",
+          contact: "9999999999"
         },
+
+        theme: {
+          color: "#ff6b6b"
+        }
       };
 
+      // 3️⃣ Open Razorpay
       const rzp = new window.Razorpay(options);
       rzp.open();
 
     } catch (error) {
-      console.error(error);
+
+      console.error("Payment Error:", error);
       alert("Payment failed");
+
     }
   };
 
@@ -92,6 +114,7 @@ export const OrderSidebar = () => {
     <div className="order-panel">
 
       <h3>Table No</h3>
+
       <input
         type="number"
         className="table-input"
