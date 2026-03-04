@@ -17,8 +17,6 @@ const app = express();
 
 /* ================= CORS CONFIG ================= */
 
-const cors = require("cors");
-
 const allowedOrigins = [
   "http://localhost:5173",
   "https://abhay-tech-coder-abhay-tech-coder-r.vercel.app"
@@ -27,7 +25,6 @@ const allowedOrigins = [
 app.use(cors({
   origin: function (origin, callback) {
 
-    // allow requests with no origin (Postman etc)
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
