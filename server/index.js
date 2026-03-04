@@ -17,23 +17,27 @@ const app = express();
 
 /* ================= CORS CONFIG ================= */
 
+const cors = require("cors");
+
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.CLIENT_URL
+  "https://abhay-tech-coder-abhay-tech-coder-r.vercel.app"
 ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS not allowed"));
-      }
-    },
-    credentials: true
-  })
-);
+app.use(cors({
+  origin: function (origin, callback) {
+
+    // allow requests with no origin (Postman etc)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("CORS not allowed"));
+  },
+  credentials: true
+}));
 
 /* ================= MIDDLEWARE ================= */
 
