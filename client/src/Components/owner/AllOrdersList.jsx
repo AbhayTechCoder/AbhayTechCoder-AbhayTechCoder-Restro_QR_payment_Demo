@@ -3,79 +3,139 @@ import socket from "../../socket";
 
 export const AllOrdersList = () => {
 
-  const [orders,setOrders] = useState([]);
+  const [orders, setOrders] = useState([]);
+
+  /* ================= FETCH ORDERS ================= */
 
   const fetchOrders = async () => {
 
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/orders/all`,
-      { credentials:"include" }
-    );
+    try {
 
-    const data = await res.json();
-    setOrders(data);
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/orders/all`,
+        { credentials: "include" }
+      );
+
+      const data = await res.json();
+
+      // 🔥 important fix
+      if (Array.isArray(data.orders)) {
+        setOrders(data.orders);
+      } else {
+        setOrders([]);
+      }
+
+    } catch (error) {
+      console.error("Fetch orders error:", error);
+      setOrders([]);
+    }
 
   };
 
 
-  useEffect(()=>{
+  /* ================= SOCKET LISTENER ================= */
+
+  useEffect(() => {
 
     fetchOrders();
 
-    socket.on("new-order",(order)=>{
-
-      setOrders(prev => [order,...prev]);
-
+    socket.on("new-order", (order) => {
+      setOrders(prev => [order, ...prev]);
     });
 
-    return ()=> socket.off("new-order");
+    return () => socket.off("new-order");
 
-  },[]);
+  }, []);
 
 
+  /* ================= MARK ORDER SERVED ================= */
 
-  const markServed = async(id)=>{
+  const markServed = async (id) => {
 
-    await fetch(
-      `${import.meta.env.VITE_API_URL}/api/orders/served/${id}`,
-      {
-        method:"PATCH",
-        credentials:"include"
-      }
-    );
+    try {
 
-    fetchOrders();
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/api/orders/served/${id}`,
+        {
+          method: "PATCH",
+          credentials: "include"
+        }
+      );
+
+      fetchOrders();
+
+    } catch (error) {
+      console.error("Serve order error:", error);
+    }
 
   };
 
 
+  /* ================= UI ================= */
 
   return (
 
     <div className="orders-list">
 
-      {orders.map(order=>(
+      {Array.isArray(orders) && orders.map(order => (
+
         <div key={order._id} className="order-card">
 
-          <h3>Table {order.tableNumber}</h3>
+          {/* HEADER */}
 
-          {order.items.map((item,i)=>(
-            <p key={i}>
-              {item.name} × {item.quantity} — ₹{item.price}
-            </p>
-          ))}
+          <div className="order-header">
+            <h3>Table {order.tableNumber}</h3>
+          </div>
 
-          <p>Total: ₹{order.totalAmount}</p>
 
-          {order.status === "pending" && (
-            <button
-              onClick={()=>markServed(order._id)}
-            >
-              Mark as Served
-            </button>
-          )}
+          {/* ITEMS */}
+
+          <div className="order-items">
+
+            {order.items?.map((item, i) => (
+
+              <div key={i} className="order-item-row">
+                <span>{item.name}</span>
+                <span>× {item.quantity}</span>
+                <span>₹{item.price}</span>
+              </div>
+
+            ))}
+
+          </div>
+
+
+          {/* FOOTER */}
+
+          <div className="order-footer">
+
+            <div className="payment-info">
+
+              <p>Total: ₹{order.totalAmount}</p>
+
+              <span className={`payment-status ${order.paymentStatus}`}>
+                {order.paymentStatus === "paid" ? "PAID" : "FAILED"}
+              </span>
+
+              <span className="payment-method">
+                {order.paymentMethod}
+              </span>
+
+            </div>
+
+            {order.status === "pending" && (
+              <button
+                className="serve-btn"
+                onClick={() => markServed(order._id)}
+              >
+                Mark as Served
+              </button>
+            )}
+
+          </div>
 
         </div>
+
       ))}
 
     </div>

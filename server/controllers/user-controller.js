@@ -195,4 +195,46 @@ const deleteMessage = async (req, res) => {
     }
 };
 
-module.exports = { getAllUser, getMe, getAdmin, postMessage, getMessages, editMessage, deleteMessage }; 
+
+const getAllMessagesForAdmin = async (req, res) => {
+  try {
+
+    const admin = req.user;
+
+    if (admin.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied"
+      });
+    }
+
+    const messages = await Message.find()
+      .sort({ createdAt: 1 })
+      .populate("sender", "username role")
+      .populate("receiver", "username role");
+
+    res.status(200).json({
+      success: true,
+      messages
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+
+  }
+};
+
+module.exports = {
+  getAllUser,
+  getMe,
+  getAdmin,
+  postMessage,
+  getMessages,
+  editMessage,
+  deleteMessage,
+  getAllMessagesForAdmin
+};

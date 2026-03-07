@@ -6,30 +6,41 @@ const {
   getAllOrders,
   getPendingOrders,
   getCompletedOrders,
-  markOrderServed
+  markOrderServed,
+  getOrderByEmail
 } = require("../controllers/order-controller");
 
 const { isAuth } = require("../middlewares/isAuth");
 
 
-/* CREATE ORDER */
+/* ================= CREATE ORDER ================= */
+
 router.post("/create", isAuth, createOrder);
 
 
-/* ALL ORDERS */
+/* ================= ALL ORDERS ================= */
+
 router.get("/all", isAuth, getAllOrders);
 
 
-/* PENDING ORDERS */
+/* ================= PENDING ORDERS ================= */
+
 router.get("/pending", isAuth, getPendingOrders);
 
 
-/* COMPLETED ORDERS */
+/* ================= COMPLETED ORDERS ================= */
+
 router.get("/completed", isAuth, getCompletedOrders);
 
 
-/* MARK ORDER AS SERVED */
+/* ================= MARK ORDER SERVED ================= */
+
 router.patch("/served/:id", isAuth, markOrderServed);
+
+
+/* ================= GET ORDER BY EMAIL ================= */
+
+router.get("/by-email/:email", isAuth, getOrderByEmail);
 
 
 module.exports = { orderRouter: router };

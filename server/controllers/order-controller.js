@@ -6,6 +6,7 @@ exports.createOrder = async (req, res) => {
   try {
 
     const order = await Order.create({
+      email: req.user?.email || req.body.email, // user email
       tableNumber: req.body.tableNumber,
       items: req.body.items,
       totalAmount: req.body.totalAmount,
@@ -18,10 +19,16 @@ exports.createOrder = async (req, res) => {
 
     io.emit("new-order", order);
 
-    res.status(201).json(order);
+    res.status(201).json({
+      success: true,
+      order
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
 
@@ -32,12 +39,19 @@ exports.createOrder = async (req, res) => {
 exports.getAllOrders = async (req, res) => {
   try {
 
-    const orders = await Order.find().sort({ createdAt: -1 });
+    const orders = await Order.find()
+      .sort({ createdAt: -1 });
 
-    res.json(orders);
+    res.json({
+      success: true,
+      orders
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
 
@@ -51,10 +65,16 @@ exports.getPendingOrders = async (req, res) => {
     const orders = await Order.find({ status: "pending" })
       .sort({ createdAt: -1 });
 
-    res.json(orders);
+    res.json({
+      success: true,
+      orders
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
 
@@ -68,10 +88,16 @@ exports.getCompletedOrders = async (req, res) => {
     const orders = await Order.find({ status: "completed" })
       .sort({ createdAt: -1 });
 
-    res.json(orders);
+    res.json({
+      success: true,
+      orders
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
 
@@ -94,9 +120,41 @@ exports.markOrderServed = async (req, res) => {
 
     io.emit("order-served", order);
 
-    res.json(order);
+    res.json({
+      success: true,
+      order
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+
+
+/* ================= GET ORDER BY EMAIL (FOR OWNER CHAT) ================= */
+
+exports.getOrderByEmail = async (req, res) => {
+  try {
+
+    const order = await Order.findOne({
+      email: req.params.email
+    }).sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      order
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
   }
 };

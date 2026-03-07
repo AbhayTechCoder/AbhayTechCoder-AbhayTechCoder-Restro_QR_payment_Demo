@@ -4,7 +4,7 @@ const orderSchema = new mongoose.Schema(
 {
   customer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "User"
   },
 
   tableNumber: {
@@ -14,9 +14,21 @@ const orderSchema = new mongoose.Schema(
 
   items: [
     {
-      name: String,
-      price: Number,
-      quantity: Number
+      name: {
+        type: String,
+        required: true
+      },
+
+      price: {
+        type: Number,
+        required: true
+      },
+
+      quantity: {
+        type: Number,
+        required: true,
+        default: 1
+      }
     }
   ],
 
@@ -25,14 +37,36 @@ const orderSchema = new mongoose.Schema(
     required: true
   },
 
+  /* ================= ORDER STATUS ================= */
+
   status: {
     type: String,
     enum: ["pending", "completed"],
     default: "pending"
+  },
+
+  /* ================= PAYMENT INFO ================= */
+
+  paymentStatus: {
+    type: String,
+    enum: ["pending", "paid"],
+    default: "pending"
+  },
+
+  paymentMethod: {
+    type: String,
+    enum: ["UPI", "Card", "Cash"],
+    default: "UPI"
+  },
+
+  paymentId: {
+    type: String
   }
 
 },
-{ timestamps: true }
+{
+  timestamps: true
+}
 );
 
 module.exports = mongoose.model("Order", orderSchema);

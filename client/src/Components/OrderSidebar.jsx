@@ -8,7 +8,8 @@ export const OrderSidebar = () => {
     setTableNumber,
     increaseQty,
     decreaseQty,
-    totalAmount
+    totalAmount,
+    clearCart
   } = useCart();
 
   const handlePayment = async () => {
@@ -66,7 +67,11 @@ export const OrderSidebar = () => {
               body: JSON.stringify({
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature
+                razorpay_signature: response.razorpay_signature,
+
+                cartItems: cartItems,
+                tableNumber: tableNumber,
+                totalAmount: totalAmount
               }),
             }
           );
@@ -77,13 +82,12 @@ export const OrderSidebar = () => {
 
             alert("Payment Successful 🎉");
 
-            // future
-            // clearCart()
+            clearCart();
 
           } else {
-
             alert("Payment Verification Failed ❌");
 
+           
           }
         },
 

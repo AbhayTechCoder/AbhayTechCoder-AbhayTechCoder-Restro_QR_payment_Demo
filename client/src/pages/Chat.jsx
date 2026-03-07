@@ -102,13 +102,12 @@ export const Chat = () => {
   return (
     <div className="chat-container container">
       <div className="chat-messages">
-        {messages.map((msg) => {
+        {Array.isArray(messages) && messages.map((msg) => {
           const senderId =
             typeof msg.sender === "object"
-              ? msg.sender._id
+              ? msg.sender?._id
               : msg.sender;
-
-          const isMine = senderId === user._id;
+          const isMine = senderId === user?._id;
 
           return (
             <div

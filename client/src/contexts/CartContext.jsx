@@ -14,7 +14,6 @@ export const CartProvider = ({ children }) => {
             const existingItem = prev.find(i => i._id === item._id);
 
             if (existingItem) {
-                // 👇 Same item found → increase quantity
                 return prev.map(i =>
                     i._id === item._id
                         ? { ...i, quantity: i.quantity + 1 }
@@ -22,12 +21,11 @@ export const CartProvider = ({ children }) => {
                 );
             }
 
-            // 👇 New item → add with quantity 1
             return [...prev, { ...item, quantity: 1 }];
         });
     };
 
-    // INCREASE
+    // INCREASE QTY
     const increaseQty = (id) => {
         setCartItems(prev =>
             prev.map(item =>
@@ -38,7 +36,7 @@ export const CartProvider = ({ children }) => {
         );
     };
 
-    // DECREASE
+    // DECREASE QTY
     const decreaseQty = (id) => {
         setCartItems(prev =>
             prev
@@ -51,10 +49,17 @@ export const CartProvider = ({ children }) => {
         );
     };
 
+    // TOTAL AMOUNT
     const totalAmount = cartItems.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0
     );
+
+    // ✅ CLEAR CART (Payment ke baad use hoga)
+    const clearCart = () => {
+        setCartItems([]);
+        setTableNumber("");
+    };
 
     return (
         <CartContext.Provider
@@ -65,7 +70,8 @@ export const CartProvider = ({ children }) => {
                 addToCart,
                 increaseQty,
                 decreaseQty,
-                totalAmount
+                totalAmount,
+                clearCart   // 👈 important
             }}
         >
             {children}

@@ -16,6 +16,8 @@ import CompletedOrders from "./pages/owner/CompletedOrders";
 import { PaymentSettings } from "./Components/owner/PaymentSettings";
 
 import { OrderSidebar } from "./Components/OrderSidebar";
+import Footer from "./Components/Footer";
+import OwnerChat from "./pages/owner/OwnerChat";
 
 import "./index.css";
 
@@ -23,9 +25,12 @@ function App() {
 
   const location = useLocation();
 
+  // Sidebar only on these pages
   const showSidebarRoutes = ["/", "/veg", "/nonveg"];
-
   const shouldShowSidebar = showSidebarRoutes.includes(location.pathname);
+
+  // Hide footer on owner dashboard
+  const hideFooterRoutes = location.pathname.startsWith("/owner");
 
   return (
     <>
@@ -43,6 +48,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
+
         <Route path="/owner" element={<OwnerDashboard />}>
 
           <Route index element={<AllOrdersList />} />
@@ -54,12 +60,15 @@ function App() {
           <Route path="post-dish" element={<PostDishes />} />
           <Route path="manage-dishes" element={<ManageDishes />} />
           <Route path="payment-settings" element={<PaymentSettings />} />
+          <Route path="chat" element={<OwnerChat />} />
 
         </Route>
 
       </Routes>
 
       {shouldShowSidebar && <OrderSidebar />}
+
+      {!hideFooterRoutes && <Footer />}
 
     </>
   );

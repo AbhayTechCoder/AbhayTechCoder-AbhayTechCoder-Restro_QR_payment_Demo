@@ -14,7 +14,9 @@ const OwnerDashboard = () => {
                 <NavLink to="completed" className="owner-link">Completed</NavLink>
                 <NavLink to="post-dish" className="owner-link">Post Dish</NavLink>
                 <NavLink to="manage-dishes" className="owner-link">Manage Dishes</NavLink>
-                <NavLink to="payment-settings" className="owner-link">Payment Settings</NavLink>
+                <NavLink to="chat" className="owner-link">
+                    Chat
+                </NavLink>
             </div>
 
             {/* 🔹 Page Load Area */}
