@@ -21,7 +21,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://abhay-tech-coder-abhay-tech-coder-r.vercel.app",
-  "https://abhay-tech-coder-abhay-tech-coder-r-virid.vercel.app"
+  "https://abhay-tech-coder-abhay-tech-coder-r-virid.vercel.app",
+  "https://abhay-tech-coder-abhay-tech-coder-restro-qr-payment-b392kqw25.vercel.app"
 ];
 
 app.use(
