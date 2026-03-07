@@ -18,26 +18,28 @@ const app = express();
 
 /* ================= CORS CONFIG ================= */
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://abhay-tech-coder-abhay-tech-coder-r.vercel.app",
-  "https://abhay-tech-coder-abhay-tech-coder-r-virid.vercel.app",
-  "https://abhay-tech-coder-abhay-tech-coder-restro-qr-payment-b392kqw25.vercel.app"
-];
+const allowedOrigin = (origin) => {
+  if (!origin) return true;
+
+  if (
+    origin === "http://localhost:5173" ||
+    origin.endsWith(".vercel.app")
+  ) {
+    return true;
+  }
+
+  return false;
+};
 
 app.use(
   cors({
     origin: function (origin, callback) {
-
-      // allow requests with no origin (mobile apps, postman)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
+      if (allowedOrigin(origin)) {
+        callback(null, true);
+      } else {
+        console.log("Blocked by CORS:", origin);
+        callback(new Error("CORS not allowed"));
       }
-
-      console.log("Blocked by CORS:", origin);
-      return callback(new Error("CORS not allowed"));
     },
     credentials: true
   })
@@ -66,7 +68,14 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (allowedOrigin(origin)) {
+        callback(null, true);
+      } else {
+        console.log("Socket blocked by CORS:", origin);
+        callback(new Error("Socket CORS not allowed"));
+      }
+    },
     methods: ["GET", "POST"],
     credentials: true
   }
