@@ -71,13 +71,13 @@ const updateDish = async (req, res) => {
             updatedDish = await Veg.findByIdAndUpdate(
                 id,
                 updateData,
-                { returnDocument: "after", runValidators: true }
+                { new: true, runValidators: true }
             );
         } else if (category === "non-veg") {
             updatedDish = await NonVeg.findByIdAndUpdate(
                 id,
                 updateData,
-                { returnDocument: "after", runValidators: true }
+                { new: true, runValidators: true }
             );
         } else {
             return res.status(400).json({ message: "Invalid category" });

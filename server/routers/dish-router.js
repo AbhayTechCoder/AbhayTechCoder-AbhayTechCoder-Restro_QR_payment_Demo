@@ -1,4 +1,5 @@
 const express = require("express");
+
 const { 
   getVegDishes, 
   getNonVegDishes,
@@ -7,19 +8,27 @@ const {
   deleteDish,
   postDish
 } = require("../controllers/dish-controllers");
+
 const { isAuth } = require("../middlewares/isAuth");
-const { isAdmin } = require("../middlewares/isAdmin");
 
 const dishRouter = express.Router();
 
+/* ================= PUBLIC ROUTES ================= */
+
 dishRouter.route("/veg").get(getVegDishes);
+
 dishRouter.route("/non-veg").get(getNonVegDishes);
-dishRouter.route("/post-dish").post(isAuth, isAdmin, postDish);
 
-dishRouter.route("/dish-update/:id").put(isAuth, isAdmin, updateDish);
-dishRouter.route("/dish-delete/:id").delete(isAuth, isAdmin, deleteDish);
+/* ================= OWNER ROUTES ================= */
 
-/* ✅ NEW ROUTE FOR OWNER */
-dishRouter.route("/all").get(getAllDishesForOwner);
+dishRouter.route("/post-dish").post(isAuth, postDish);
+
+dishRouter.route("/dish-update/:id").put(isAuth, updateDish);
+
+dishRouter.route("/dish-delete/:id").delete(isAuth, deleteDish);
+
+/* ================= OWNER DASHBOARD ================= */
+
+dishRouter.route("/all").get(isAuth, getAllDishesForOwner);
 
 module.exports = { dishRouter };
