@@ -2,20 +2,28 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./ManageDishes.css";
 
-
 export const ManageDishes = () => {
+
   const [dishes, setDishes] = useState([]);
   const [category, setCategory] = useState("veg");
   const [editDish, setEditDish] = useState(null);
 
   const BASE_URL = import.meta.env.VITE_API_URL;
 
+  /* ================= FETCH DISHES ================= */
+
   const fetchDishes = async () => {
     try {
+
       const res = await axios.get(
-        `${BASE_URL}/api/dishes/all`
+        `${BASE_URL}/api/dishes/all`,
+        {
+          withCredentials: true   // ⭐ IMPORTANT FIX
+        }
       );
+
       setDishes(res.data);
+
     } catch (err) {
       console.log("Error fetching dishes:", err);
     }
@@ -25,8 +33,11 @@ export const ManageDishes = () => {
     fetchDishes();
   }, []);
 
+  /* ================= DELETE ================= */
+
   const handleDelete = async (id, category) => {
     try {
+
       await axios.delete(
         `${BASE_URL}/api/dishes/dish-delete/${id}`,
         {
@@ -36,23 +47,30 @@ export const ManageDishes = () => {
       );
 
       fetchDishes();
+
     } catch (err) {
       console.log("Delete error:", err);
     }
   };
 
+  /* ================= UPDATE ================= */
+
   const handleUpdate = async () => {
     try {
+
       const { _id, name, price, description, category } = editDish;
 
       await axios.put(
         `${BASE_URL}/api/dishes/dish-update/${_id}`,
         { name, price, description, category },
-        { withCredentials: true }
+        {
+          withCredentials: true
+        }
       );
 
       setEditDish(null);
       fetchDishes();
+
     } catch (err) {
       console.log("Update error:", err);
     }
@@ -64,7 +82,9 @@ export const ManageDishes = () => {
 
   return (
     <div className="container">
+
       <div className="owner-nav">
+
         <button
           className={`owner-link ${category === "veg" ? "active" : ""}`}
           onClick={() => setCategory("veg")}
@@ -78,14 +98,19 @@ export const ManageDishes = () => {
         >
           Non-Veg
         </button>
+
       </div>
 
       <div className="veg-grid card-padding">
+
         {filteredDishes.length === 0 ? (
           <p>No dishes found</p>
         ) : (
+
           filteredDishes.map((item) => (
+
             <div className="card" key={item._id}>
+
               <div className="veg-image-container">
                 <img
                   src={item.image_url}
@@ -95,12 +120,19 @@ export const ManageDishes = () => {
               </div>
 
               <h3 className="veg-title">{item.name}</h3>
-              <p className="veg-description">{item.description}</p>
+
+              <p className="veg-description">
+                {item.description}
+              </p>
 
               <div className="card-price">
-                <p className="veg-price">₹{item.price}</p>
+
+                <p className="veg-price">
+                  ₹{item.price}
+                </p>
 
                 <div style={{ display: "flex", gap: "10px" }}>
+
                   <button
                     className="btn"
                     onClick={() => setEditDish({ ...item })}
@@ -116,16 +148,27 @@ export const ManageDishes = () => {
                   >
                     Delete
                   </button>
+
                 </div>
+
               </div>
+
             </div>
+
           ))
+
         )}
+
       </div>
 
+      {/* ================= EDIT MODAL ================= */}
+
       {editDish && (
+
         <div className="modal-overlay">
+
           <div className="modal-box">
+
             <button
               className="close-modal"
               onClick={() => setEditDish(null)}
@@ -139,7 +182,10 @@ export const ManageDishes = () => {
               type="text"
               value={editDish.name}
               onChange={(e) =>
-                setEditDish({ ...editDish, name: e.target.value })
+                setEditDish({
+                  ...editDish,
+                  name: e.target.value
+                })
               }
               placeholder="Dish Name"
             />
@@ -148,7 +194,10 @@ export const ManageDishes = () => {
               type="number"
               value={editDish.price}
               onChange={(e) =>
-                setEditDish({ ...editDish, price: e.target.value })
+                setEditDish({
+                  ...editDish,
+                  price: e.target.value
+                })
               }
               placeholder="Price"
             />
@@ -158,18 +207,25 @@ export const ManageDishes = () => {
               onChange={(e) =>
                 setEditDish({
                   ...editDish,
-                  description: e.target.value,
+                  description: e.target.value
                 })
               }
               placeholder="Description"
             />
 
-            <button className="btn" onClick={handleUpdate}>
+            <button
+              className="btn"
+              onClick={handleUpdate}
+            >
               Update Dish
             </button>
+
           </div>
+
         </div>
+
       )}
+
     </div>
   );
 };
