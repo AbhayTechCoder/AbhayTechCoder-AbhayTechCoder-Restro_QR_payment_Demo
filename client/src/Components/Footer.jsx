@@ -21,7 +21,7 @@ export default function Footer() {
         <div className="footer-contact">
           <h4>Contact</h4>
           <p>Email: support@deliciousbites.com</p>
-          <p>Phone: +91 9793979220</p>
+          <p>Phone: +91 9793xxxxx</p>
         </div>
 
       </div>
